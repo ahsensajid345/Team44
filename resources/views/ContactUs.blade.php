@@ -1,96 +1,6 @@
-<!DOCTYPE html>
-<html lang="en">
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Contact Us</title>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-    <style>
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: #f8f9fa;
-            color: black; 
-            margin: 20px;
-        }
-
-        .contact-container {
-            max-width: 800px;
-            margin: 0 auto;
-            background-color: #fff;
-            padding: 30px;
-            border-radius: 10px;
-            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
-            text-align: center;
-        }
-
-        .section-container {
-            border: 2px solid black; 
-            border-radius: 10px;
-            padding: 20px;
-            margin-bottom: 20px;
-            overflow: hidden;
-            background-color: #f8f9fa;
-        }
-
-        .contact-details,
-        .user-input {
-            width: 100%;
-            margin-bottom: 20px;
-            color: black; 
-        }
-
-        .contact-details,
-        .user-input {
-            text-align: left;
-        }
-
-        .contact-details h2,
-        .user-input h2 {
-            color: black; 
-            margin-bottom: 10px;
-        }
-
-        .contact-details p {
-            color: #555;
-            margin: 5px 0;
-        }
-
-        .form-group {
-            margin-bottom: 15px;
-        }
-
-        .btn-submit {
-            background-color: #007bff;
-            color: black; 
-            padding: 10px 15px;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-        }
-
-        .btn-submit:hover {
-            background-color: #007bff;
-        }
-
-        .form-control {
-            border-radius: 5px;
-            color: black; 
-        }
-
-        h1 {
-            color: black; 
-            margin-bottom: 10px;
-        }
-
-        p {
-            margin: 10px 0;
-        }
-    </style>
-</head>
+@include('includes.navigation')
 
 <body>
-    @include('Navigation')
     <div class="contact-container">
         <h1>Contact Us</h1>
 
@@ -115,6 +25,21 @@
                     <label for="message">Message:</label>
                     <textarea class="form-control" id="message" name="message" rows="4" required></textarea>
                 </div>
+                <div class="form-group">
+                    <label for="rate">Rate us:</label>
+                    <div class="rating-container">
+                        <input type="radio" id="star5" name="rate" value="5">
+                        <label for="star5"><i class="fas fa-star"></i></label>
+                        <input type="radio" id="star4" name="rate" value="4">
+                        <label for="star4"><i class="fas fa-star"></i></label>
+                        <input type="radio" id="star3" name="rate" value="3">
+                        <label for="star3"><i class="fas fa-star"></i></label>
+                        <input type="radio" id="star2" name="rate" value="2">
+                        <label for="star2"><i class="fas fa-star"></i></label>
+                        <input type="radio" id="star1" name="rate" value="1">
+                        <label for="star1"><i class="fas fa-star"></i></label>
+                    </div>
+                </div>
                 <button type="button" class="btn-submit" onclick="submitForm()">Submit</button>
             </form>
         </div>
@@ -122,10 +47,33 @@
 
     <script>
         function submitForm() {
-            alert('Form submitted!');
+            // Get the selected rating value
+            var rating = document.querySelector('input[name="rate"]:checked');
+            
+            // Check if a rating is selected
+            if (!rating) {
+                alert('Please select a rating');
+                return;
+            }
+
+            // Get form data
+            var formData = new FormData(document.getElementById('contactForm'));
+
+            // Append the rating to the form data
+            formData.append('rating', rating.value);
+
+            // Perform your AJAX submission or any other logic here
+            // Example using fetch API:
+            fetch('/submit-form', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                // Handle the response as needed
+                console.log(data);
+            })
+            .catch(error => console.error('Error:', error));
         }
     </script>
-
 </body>
-
-</html>
